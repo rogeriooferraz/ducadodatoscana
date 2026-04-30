@@ -32,11 +32,13 @@ for (const viewport of viewports) {
     await expect(labels).toHaveCount(2);
 
     const layout = await page.evaluate(() => {
+      const heroContentEl = document.querySelector('.hero-content');
       const titleEl = document.querySelector('.hero-title');
       const linksEl = document.querySelector('.links-container');
       const imageEls = Array.from(document.querySelectorAll('.link-imagem'));
       const labelEls = Array.from(document.querySelectorAll('.camera-label'));
 
+      const heroContentRect = heroContentEl.getBoundingClientRect();
       const titleRect = titleEl.getBoundingClientRect();
       const linksRect = linksEl.getBoundingClientRect();
       const imageRects = imageEls.map((img) => img.getBoundingClientRect());
@@ -49,7 +51,9 @@ for (const viewport of viewports) {
         viewportWidth: window.innerWidth,
         viewportHeight: window.innerHeight,
         scrollWidth: document.documentElement.scrollWidth,
+        heroContentRect,
         titleRect,
+        titleFontSize: parseFloat(window.getComputedStyle(titleEl).fontSize),
         linksRect,
         imageRects,
         labelsData,
@@ -69,6 +73,16 @@ for (const viewport of viewports) {
     expect(layout.linksRect.bottom).toBeLessThanOrEqual(layout.viewportHeight - 8);
     expect(layout.linksRect.top).toBeGreaterThan(layout.titleRect.bottom);
     expect(layout.imageRects[0].height).toBeGreaterThan(150);
+    const availableCenter = (layout.heroContentRect.top + layout.linksRect.top) / 2;
+    const titleCenter = (layout.titleRect.top + layout.titleRect.bottom) / 2;
+    expect(Math.abs(titleCenter - availableCenter)).toBeLessThanOrEqual(
+      Math.max(24, layout.viewportHeight * 0.06)
+    );
+    if (viewport.width <= 480 && viewport.height <= 720) {
+      expect(layout.titleFontSize).toBeGreaterThanOrEqual(33);
+    } else if (viewport.width <= 480) {
+      expect(layout.titleFontSize).toBeGreaterThanOrEqual(40);
+    }
     const descendingLabel = layout.labelsData.find((label) => label.text === 'DESCENDO A CALÇADA');
     const ascendingLabel = layout.labelsData.find((label) => label.text === 'SUBINDO A CALÇADA');
     expect(descendingLabel.rect.left).toBeGreaterThanOrEqual(layout.imageRects[0].left);
