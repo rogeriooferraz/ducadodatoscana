@@ -1,0 +1,114 @@
+# Site do Condomínio Ducado da Toscana
+
+Este repositório contém uma landing page estática simples do
+Condomínio Ducado da Toscana. A página apresenta o nome do condomínio
+sobre uma imagem de fundo em tela cheia e oferece dois links para
+transmissões ao vivo.
+
+O projeto não usa framework nem etapa de build. O site é servido
+diretamente a partir de arquivos estáticos.
+
+## Estrutura do projeto
+
+- `index.html`: documento principal e conteúdo da página.
+- `styles.css`: estilos da página e regras de responsividade.
+- `assets/images/fachada.webp`: imagem de fundo principal.
+- `assets/images/camera-esquerda.webp`: imagem da câmera de descida.
+- `assets/images/camera-direita.webp`: imagem da câmera de subida.
+- `tests/responsive.spec.js`: testes de regressão visual e responsiva
+  com Playwright.
+- `playwright.config.js`: configuração do Playwright.
+- `package.json`: script de teste e dependências de desenvolvimento.
+
+## Comportamento atual
+
+A página inicial:
+
+- exibe o nome do condomínio como texto sobreposto acima das câmeras;
+- usa `assets/images/fachada.webp` como imagem de fundo principal;
+- mostra dois cartões de câmera com rótulos de direção;
+- abre cada transmissão do YouTube em uma nova aba;
+- adapta o layout para celulares, tablets e telas maiores.
+
+## Visualização local
+
+Para uma verificação rápida, basta abrir `index.html` no navegador.
+
+Se preferir usar um servidor local, execute no diretório do projeto:
+
+```bash
+python3 -m http.server 8000
+```
+
+Depois acesse:
+
+```text
+http://localhost:8000
+```
+
+## Testes
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Execute a suíte de regressão responsiva:
+
+```bash
+npm test
+```
+
+Os testes com Playwright cobrem tamanhos representativos de celular e
+tablet e verificam:
+
+- visibilidade e posicionamento do título;
+- layout responsivo dos cartões de câmera;
+- presença e posicionamento dos rótulos das câmeras;
+- tamanho do título em telas pequenas;
+- regressões de overflow horizontal.
+
+## Edições comuns
+
+### Atualizar os links das câmeras
+
+Edite os valores de `href` em `index.html` nas duas âncoras das
+transmissões.
+
+### Atualizar as imagens das câmeras
+
+Substitua os arquivos dentro de `assets/images/`, mantendo os mesmos
+nomes, ou ajuste os atributos `src` em `index.html` se os nomes dos
+arquivos mudarem.
+
+### Atualizar a imagem de fundo
+
+Substitua `assets/images/fachada.webp` ou ajuste a regra
+`background-image` em `styles.css`.
+
+### Atualizar rótulos ou estilos do título
+
+A maior parte das mudanças visuais deve ser feita em `styles.css`. O
+texto do título fica em `index.html`, enquanto as regras de tamanho,
+espaçamento e responsividade ficam na folha de estilos.
+
+## Orientações de manutenção
+
+- Mantenha os nomes dos arquivos alinhados com as referências em
+  `index.html` e `styles.css`.
+- Execute `npm test` após mudanças funcionais ou de layout.
+- Verifique a renderização em desktop e mobile após alterações visuais.
+- Se o comportamento público do site mudar, atualize este README antes
+  de finalizar.
+
+## Publicação
+
+Este repositório não inclui automação de deploy. A publicação depende
+do ambiente de hospedagem usado para o site.
+
+Em termos práticos, o fluxo mínimo costuma ser:
+
+1. atualizar os arquivos estáticos;
+2. publicar ou enviar os arquivos alterados para a hospedagem;
+3. validar a página publicada, os links e o layout responsivo.

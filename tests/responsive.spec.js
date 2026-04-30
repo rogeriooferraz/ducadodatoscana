@@ -34,7 +34,7 @@ for (const viewport of viewports) {
     const layout = await page.evaluate(() => {
       const heroContentEl = document.querySelector('.hero-content');
       const titleEl = document.querySelector('.hero-title');
-      const linksEl = document.querySelector('.links-container');
+      const linksEl = document.querySelector('.camera-list');
       const imageEls = Array.from(document.querySelectorAll('.link-imagem'));
       const labelEls = Array.from(document.querySelectorAll('.camera-label'));
 

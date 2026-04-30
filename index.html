@@ -1,278 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        :root {
-            --page-padding: clamp(20px, 5vw, 56px);
-            --content-width: min(100%, 980px);
-            --card-radius: 22px;
-            --card-border: rgba(255, 255, 255, 0.92);
-            --title-color: #fdfbf6;
-            --shadow-color: rgba(16, 24, 32, 0.36);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            min-height: 100%;
-        }
-
-        body {
-            margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--title-color);
-            background-color: #d7d0c2;
-        }
-
-        .hero {
-            min-height: 100vh;
-            min-height: 100svh;
-            padding: var(--page-padding);
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            background-image:
-                linear-gradient(
-                    to bottom,
-                    rgba(247, 242, 231, 0.22) 0%,
-                    rgba(224, 214, 197, 0.12) 22%,
-                    rgba(94, 84, 68, 0.16) 58%,
-                    rgba(41, 32, 23, 0.42) 100%
-                ),
-                radial-gradient(
-                    circle at top center,
-                    rgba(255, 248, 236, 0.42) 0%,
-                    rgba(255, 248, 236, 0.12) 24%,
-                    rgba(255, 248, 236, 0) 60%
-                ),
-                url('fachada.webp');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)),
-                linear-gradient(to top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
-            pointer-events: none;
-        }
-
-        .hero-content {
-            width: var(--content-width);
-            min-height: calc(100vh - (var(--page-padding) * 2));
-            min-height: calc(100svh - (var(--page-padding) * 2));
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            gap: clamp(28px, 6vh, 56px);
-            padding-block: clamp(10px, 2vh, 24px);
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-title {
-            margin: auto 0;
-            width: min(100%, 18ch);
-            text-align: center;
-            text-wrap: balance;
-            font-size: clamp(2rem, 7vw, 4.6rem);
-            line-height: 1.05;
-            letter-spacing: 0.04em;
-            text-shadow:
-                0 4px 18px rgba(0, 0, 0, 0.45),
-                0 1px 0 rgba(0, 0, 0, 0.25);
-        }
-
-        .links-container {
-            width: min(100%, 38rem);
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: clamp(18px, 3vw, 28px);
-        }
-
-        .camera-link {
-            display: block;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--card-radius);
-            border: 3px solid var(--card-border);
-            box-shadow: 0 20px 40px var(--shadow-color);
-            background: rgba(255, 255, 255, 0.88);
-        }
-
-        .link-imagem {
-            display: block;
-            width: 100%;
-            aspect-ratio: 16 / 10;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .camera-link::after {
-            content: "";
-            position: absolute;
-            inset: auto 0 0;
-            height: 38%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0));
-            pointer-events: none;
-        }
-
-        .camera-label {
-            position: absolute;
-            bottom: clamp(12px, 4%, 24px);
-            z-index: 1;
-            max-width: 76%;
-            margin: 0;
-            color: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: clamp(1rem, 2vw, 1.45rem);
-            font-weight: 700;
-            line-height: 1.1;
-            letter-spacing: 0.08em;
-            text-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.55),
-                0 1px 1px rgba(0, 0, 0, 0.5);
-        }
-
-        .camera-label-left {
-            left: clamp(12px, 4%, 28px);
-            text-align: left;
-        }
-
-        .camera-label-right {
-            right: clamp(12px, 4%, 28px);
-            text-align: right;
-        }
-
-        .camera-link:hover .link-imagem,
-        .camera-link:focus-visible .link-imagem {
-            transform: translateY(-4px) scale(1.02);
-        }
-
-        .camera-link:hover,
-        .camera-link:focus-visible {
-            box-shadow: 0 26px 50px rgba(16, 24, 32, 0.46);
-            border-color: #ffffff;
-        }
-
-        .camera-link:focus-visible {
-            outline: none;
-        }
-
-        @media (min-width: 720px) {
-            .hero-content {
-                gap: clamp(36px, 8vh, 84px);
-            }
-
-            .links-container {
-                width: min(100%, 860px);
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (min-width: 720px) and (max-width: 1024px) {
-            .hero-title {
-                width: min(100%, 15ch);
-                font-size: clamp(2.8rem, 6vw, 4.1rem);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero {
-                background-position: center top;
-            }
-
-            .hero-title {
-                width: min(100%, 12ch);
-                font-size: clamp(2.3rem, 11.8vw, 3.55rem);
-                line-height: 1.08;
-            }
-
-            .links-container {
-                width: min(100%, 24rem);
-            }
-
-            .link-imagem {
-                aspect-ratio: 4 / 3;
-            }
-
-            .camera-label {
-                max-width: 82%;
-                font-size: clamp(0.92rem, 4.3vw, 1.2rem);
-                letter-spacing: 0.06em;
-            }
-        }
-
-        @media (min-width: 481px) and (max-width: 719px) {
-            .hero-title {
-                width: min(100%, 13ch);
-                font-size: clamp(2.3rem, 8vw, 3.5rem);
-            }
-
-            .links-container {
-                width: min(100%, 30rem);
-            }
-        }
-
-        @media (max-width: 480px) and (max-height: 720px) {
-            .hero {
-                padding: 14px;
-            }
-
-            .hero-content {
-                gap: 18px;
-                padding-block: 4px;
-            }
-
-            .hero-title {
-                width: min(100%, 11ch);
-                font-size: clamp(1.95rem, 9.8vw, 2.8rem);
-                line-height: 1.02;
-            }
-
-            .links-container {
-                width: min(100%, 21rem);
-                gap: 14px;
-            }
-
-            .link-imagem {
-                aspect-ratio: 16 / 10;
-            }
-
-            .camera-label {
-                max-width: 84%;
-                font-size: clamp(0.82rem, 3.9vw, 1rem);
-            }
-        }
-    </style>
+    <title>Condomínio Ducado da Toscana</title>
+    <meta name="description" content="Acesso rápido às transmissões ao vivo do Condomínio Ducado da Toscana.">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <!-- EDIÇÃO DE 13/07/2025 - 17H25 -->
 <body>
     <main class="hero">
-        <section class="hero-content">
-            <h1 class="hero-title">Condomínio Ducado da Toscana</h1>
-
-            <div class="links-container">
-                <a class="camera-link" href="https://youtu.be/ry9kVJuqUCs?autoplay=1" title="Transmissão ao vivo de Ducado da Toscana" frameborder="0" allow="accelerometer; autoplay=1; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen target="_blank">
-                    <img src="camera-esquerda.webp" alt="Câmera ao vivo da calçada da portaria" class="link-imagem">
-                    <span class="camera-label camera-label-left">DESCENDO A CALÇADA</span>
-                </a>
-                <a class="camera-link" href="https://youtu.be/ZXFSWTXopcc?autoplay=1" title="Transmissão ao vivo de Ducado da Toscana" frameborder="0" allow="accelerometer; autoplay=1; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen target="_blank">
-                    <img src="camera-direita.webp" alt="Câmera ao vivo da calçada subindo" class="link-imagem">
-                    <span class="camera-label camera-label-right">SUBINDO A CALÇADA</span>
-                </a>
-            </div>
+        <section class="hero-content" aria-labelledby="site-title">
+            <header>
+                <h1 class="hero-title" id="site-title">Condomínio Ducado da Toscana</h1>
+            </header>
+            <ul class="camera-list" aria-label="Câmeras ao vivo">
+                <li class="camera-list-item">
+                    <a class="camera-link" href="https://youtu.be/ry9kVJuqUCs?autoplay=1" title="Transmissão ao vivo de Ducado da Toscana" referrerpolicy="strict-origin-when-cross-origin" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/images/camera-esquerda.webp" alt="Câmera ao vivo da calçada da portaria" class="link-imagem">
+                        <span class="camera-label camera-label-left">DESCENDO A CALÇADA</span>
+                    </a>
+                </li>
+                <li class="camera-list-item">
+                    <a class="camera-link" href="https://youtu.be/ZXFSWTXopcc?autoplay=1" title="Transmissão ao vivo de Ducado da Toscana" referrerpolicy="strict-origin-when-cross-origin" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/images/camera-direita.webp" alt="Câmera ao vivo da calçada subindo" class="link-imagem">
+                        <span class="camera-label camera-label-right">SUBINDO A CALÇADA</span>
+                    </a>
+                </li>
+            </ul>
         </section>
     </main>
 </body>
