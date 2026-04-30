@@ -24,19 +24,26 @@ for (const viewport of viewports) {
     const hero = page.locator('.hero');
     const title = page.locator('.hero-title');
     const images = page.locator('.link-imagem');
+    const labels = page.locator('.camera-label');
 
     await expect(hero).toBeVisible();
     await expect(title).toBeVisible();
     await expect(images).toHaveCount(2);
+    await expect(labels).toHaveCount(2);
 
     const layout = await page.evaluate(() => {
       const titleEl = document.querySelector('.hero-title');
       const linksEl = document.querySelector('.links-container');
       const imageEls = Array.from(document.querySelectorAll('.link-imagem'));
+      const labelEls = Array.from(document.querySelectorAll('.camera-label'));
 
       const titleRect = titleEl.getBoundingClientRect();
       const linksRect = linksEl.getBoundingClientRect();
       const imageRects = imageEls.map((img) => img.getBoundingClientRect());
+      const labelsData = labelEls.map((label) => ({
+        text: label.textContent.trim(),
+        rect: label.getBoundingClientRect(),
+      }));
 
       return {
         viewportWidth: window.innerWidth,
@@ -45,11 +52,16 @@ for (const viewport of viewports) {
         titleRect,
         linksRect,
         imageRects,
+        labelsData,
         titleAlign: window.getComputedStyle(titleEl).textAlign,
       };
     });
 
     expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.labelsData.map((label) => label.text).sort()).toEqual([
+      'DESCENDO A CALÇADA',
+      'SUBINDO A CALÇADA',
+    ]);
     expect(layout.titleAlign).toBe('center');
     expect(layout.titleRect.left).toBeGreaterThanOrEqual(12);
     expect(layout.viewportWidth - layout.titleRect.right).toBeGreaterThanOrEqual(12);
@@ -57,6 +69,20 @@ for (const viewport of viewports) {
     expect(layout.linksRect.bottom).toBeLessThanOrEqual(layout.viewportHeight - 8);
     expect(layout.linksRect.top).toBeGreaterThan(layout.titleRect.bottom);
     expect(layout.imageRects[0].height).toBeGreaterThan(150);
+    const descendingLabel = layout.labelsData.find((label) => label.text === 'DESCENDO A CALÇADA');
+    const ascendingLabel = layout.labelsData.find((label) => label.text === 'SUBINDO A CALÇADA');
+    expect(descendingLabel.rect.left).toBeGreaterThanOrEqual(layout.imageRects[0].left);
+    expect(descendingLabel.rect.right).toBeLessThanOrEqual(layout.imageRects[0].right);
+    expect(descendingLabel.rect.bottom).toBeLessThanOrEqual(layout.imageRects[0].bottom);
+    expect(descendingLabel.rect.right).toBeLessThan(
+      layout.imageRects[0].right - layout.imageRects[0].width * 0.25
+    );
+    expect(ascendingLabel.rect.left).toBeGreaterThanOrEqual(layout.imageRects[1].left);
+    expect(ascendingLabel.rect.right).toBeLessThanOrEqual(layout.imageRects[1].right);
+    expect(ascendingLabel.rect.bottom).toBeLessThanOrEqual(layout.imageRects[1].bottom);
+    expect(ascendingLabel.rect.left).toBeGreaterThan(
+      layout.imageRects[1].left + layout.imageRects[1].width * 0.25
+    );
 
     if (viewport.compact) {
       expect(layout.imageRects[0].width).toBeGreaterThan(layout.viewportWidth * 0.75);
