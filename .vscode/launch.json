@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "editor-browser",
+      "request": "launch",
+      "name": "Open Site in Integrated Browser",
+      "url": "file://${workspaceFolder}/index.html"
+    },
+    {
+      "type": "editor-browser",
+      "request": "attach",
+      "name": "Reuse Integrated Browser Tab",
+      "urlFilter": "file://${workspaceFolder}/index.html*"
+    }
+  ]
+}

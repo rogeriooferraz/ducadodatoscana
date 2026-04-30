@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            /* Imagem de fundo cobrindo toda a tela */
+            background-image: url('fundo.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .links-container {
+            /* Container para os links/imagens */
+            display: flex;
+            gap: 50px; /* Espaço entre as imagens */
+        }
+
+        .link-imagem {
+            /* Estilo das imagens clicáveis */
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            border: 2px solid white;
+            transition: transform 0.3s;
+        }
+
+        .link-imagem:hover {
+            transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+        }
+    </style>
+</head>
+<!-- EDIÇÃO DE 13/07/2025 - 17H25 -->
+<body>
+    <div class="links-container">
+        <!-- Primeiro link com imagem -->
+        <a href="https://youtu.be/ZXFSWTXopcc?autoplay=1" title="Transmissão ao vivo de Ducado da Toscana" frameborder="0" allow="accelerometer; autoplay=1; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen target="_blank">
+            <img src="CALCADA_SUBINDO.jpg" alt="Link 1" class="link-imagem">
+        </a>
+        
+        <!-- Segundo link com imagem -->
+        <a href="https://youtu.be/ry9kVJuqUCs?autoplay=1" title="Transmissão ao vivo de Ducado da Toscana" frameborder="0" allow="accelerometer; autoplay=1; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen target="_blank">
+            <img src="CALCADA_PORTARIA.jpg" alt="Link 2" class="link-imagem">
+        </a>
+    </div>
+</body>
+</html>
