@@ -4,6 +4,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 
 const pageUrl = process.env.PLAYWRIGHT_BASE_URL || pathToFileURL(path.join(__dirname, '..', 'index.html')).href;
+const projectRoot = path.join(__dirname, '..');
 
 const viewports = [
   { name: 'Galaxy S20 Ultra', width: 360, height: 800, compact: true },
@@ -60,6 +61,19 @@ test('declared favicon assets are fetchable from the served site', async ({ page
     .evaluateAll((links) => [...new Set(links.map((link) => link.href))]);
 
   for (const href of iconHrefs) {
+    const url = new URL(href);
+
+    if (url.protocol === 'file:') {
+      const relativePath = decodeURIComponent(url.pathname).replace(/^\/+/, '');
+      const assetPath = path.join(projectRoot, relativePath);
+
+      expect(
+        fs.existsSync(assetPath),
+        `${href} should resolve to a local file`
+      ).toBe(true);
+      continue;
+    }
+
     const response = await request.get(href);
     expect(response.ok(), `${href} should return a successful response`).toBe(true);
   }
@@ -113,16 +127,62 @@ test('SEO and crawler metadata are present', async ({ page }) => {
     expect(fs.existsSync(assetPath), `${asset} should exist in the site root`).toBe(true);
   }
 
-  const youtubeLinks = page.locator('a.camera-link[href*="youtu"]');
-  await expect(youtubeLinks).toHaveCount(2);
-  await expect(youtubeLinks.nth(0)).toHaveAttribute(
-    'rel',
-    /(^| )nofollow( |$).*noopener.*noreferrer.*external|(^| )external( |$).*nofollow/
+  const cameraLinks = page.locator('a.camera-link');
+  await expect(cameraLinks).toHaveCount(2);
+  await expect(cameraLinks.nth(0)).toHaveAttribute('href', 'camera.html?camera=descendo');
+  await expect(cameraLinks.nth(1)).toHaveAttribute('href', 'camera.html?camera=subindo');
+});
+
+test('camera player pages open in full-window layout and support back navigation', async ({ page }) => {
+  await page.goto(pageUrl);
+  await page.locator('a.camera-link').nth(0).click();
+
+  await expect(page).toHaveURL(/camera\.html\?camera=descendo$/);
+  await expect(page.locator('.player-title')).toHaveText('Descendo a calçada');
+  await expect(page.locator('.player-frame')).toBeVisible();
+  await expect(page.locator('.player-frame')).toHaveAttribute(
+    'src',
+    /youtube\.com\/embed\/ZXFSWTXopcc\?autoplay=1&rel=0/
   );
-  await expect(youtubeLinks.nth(1)).toHaveAttribute(
-    'rel',
-    /(^| )nofollow( |$).*noopener.*noreferrer.*external|(^| )external( |$).*nofollow/
+  await expect(page.locator('.player-action-primary')).toHaveText('Tela cheia');
+  await expect(page.getByRole('link', { name: 'Voltar ao início' })).toHaveAttribute('href', 'index.html');
+  await expect(page.locator('#youtube-link')).toHaveAttribute('href', 'https://www.youtube.com/watch?v=ZXFSWTXopcc');
+
+  const firstLayout = await page.evaluate(() => {
+    const frame = document.querySelector('.player-frame');
+    const rect = frame.getBoundingClientRect();
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      frameWidth: rect.width,
+      frameHeight: rect.height,
+    };
+  });
+
+  expect(firstLayout.frameWidth).toBeGreaterThan(firstLayout.width * 0.88);
+  expect(firstLayout.frameHeight).toBeGreaterThan(firstLayout.height * 0.55);
+
+  await page.goBack();
+  await expect(page).toHaveURL(pageUrl);
+  await expect(page.locator('.hero-title')).toBeVisible();
+
+  await page.locator('a.camera-link').nth(1).click();
+  await expect(page).toHaveURL(/camera\.html\?camera=subindo$/);
+  await expect(page.locator('.player-title')).toHaveText('Subindo a calçada');
+  await expect(page.locator('.player-frame')).toHaveAttribute(
+    'src',
+    /youtube\.com\/embed\/ry9kVJuqUCs\?autoplay=1&rel=0/
   );
+  await expect(page.locator('#youtube-link')).toHaveAttribute('href', 'https://www.youtube.com/watch?v=ry9kVJuqUCs');
+});
+
+test('fullscreen button requests browser fullscreen for the player', async ({ page }) => {
+  await page.goto(new URL('camera.html?camera=descendo', pageUrl).href);
+  await page.locator('.player-action-primary').click();
+
+  await expect.poll(async () => {
+    return page.evaluate(() => document.fullscreenElement?.id || null);
+  }).toBe('camera-player');
 });
 
 for (const viewport of viewports) {

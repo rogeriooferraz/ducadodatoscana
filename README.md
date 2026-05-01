@@ -20,6 +20,9 @@ português (Brasil).
   WhatsApp e outros aplicativos e serviços de compartilhamento.
 - `assets/images/camera-esquerda.webp`: imagem da câmera de descida.
 - `assets/images/camera-direita.webp`: imagem da câmera de subida.
+- `camera.html`: página local de visualização em tela inteira para as
+  transmissões, com seleção de câmera via parâmetro na URL.
+- `player.css`: estilos compartilhados das páginas das câmeras.
 - `favicon.ico` e demais arquivos `favicon-*`, `apple-touch-icon.png`,
   `android-chrome-*.png`, `icon-maskable-*.png`, `mstile-150x150.png`,
   `site.webmanifest` e `browserconfig.xml`: ícones do site e metadados
@@ -38,14 +41,13 @@ A página inicial:
 - exibe o nome do condomínio como texto sobreposto acima das câmeras;
 - usa `assets/images/fachada.webp` como imagem de fundo principal;
 - mostra dois cartões de câmera com rótulos de direção;
-- abre cada transmissão do YouTube em uma nova aba;
+- abre cada câmera em uma página local de visualização em tela inteira;
+- oferece um botão próprio de tela cheia dentro da página de cada câmera;
 - permite indexação da página principal com metadados de SEO,
   Open Graph, Twitter Card e dados estruturados;
 - usa `assets/images/fachada.jpg` como imagem de prévia de link;
 - expõe `robots.txt`, `sitemap.xml` e `llms.txt` para descoberta por
   crawlers;
-- marca os links externos do YouTube com `rel="nofollow"` para evitar
-  que sejam tratados como links editoriais para indexação;
 - adapta o layout para celulares, tablets e telas maiores.
 - expõe favicon, ícone para iOS, manifesto web e metadados de tile
   para plataformas compatíveis.
@@ -89,9 +91,11 @@ tablet e verificam:
 - presença dos metadados de SEO, Open Graph, Twitter Card e JSON-LD;
 - existência local da imagem de prévia de link usada nas metatags;
 - existência local de `robots.txt`, `sitemap.xml` e `llms.txt`;
-- uso de `rel="nofollow"` nos links externos do YouTube;
+- navegação da home para as páginas locais das câmeras;
+- funcionamento da navegação de volta pelo histórico do navegador;
 - carregamento da imagem de fundo principal;
 - carregamento real das duas imagens das câmeras;
+- presença do player incorporado com o vídeo esperado em cada página;
 - layout responsivo dos cartões de câmera;
 - presença e posicionamento dos rótulos das câmeras;
 - tamanho do título em telas pequenas;
@@ -102,8 +106,8 @@ tablet e verificam:
 ### Atualizar os links das câmeras
 
 Edite os valores de `href` em `index.html` nas duas âncoras das
-transmissões. Preserve `rel="nofollow noopener noreferrer external"`
-para manter o comportamento atual de crawler.
+transmissões se quiser alterar o destino local. Para mudar o vídeo do
+YouTube exibidos, atualize o objeto `cameraConfigs` em `camera.html`.
 
 ### Atualizar as imagens das câmeras
 
