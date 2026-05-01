@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
@@ -15,6 +16,38 @@ const viewports = [
   { name: 'iPad Pro 11', width: 834, height: 1194, compact: false },
   { name: 'iPad Pro 12.9', width: 1024, height: 1366, compact: false },
 ];
+
+test('favicon metadata and assets are present', async ({ page }) => {
+  await page.goto(pageUrl);
+
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', 'site.webmanifest');
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
+    'href',
+    'apple-touch-icon.png'
+  );
+  await expect(page.locator('link[rel="icon"][sizes="any"]')).toHaveAttribute('href', 'favicon.ico');
+
+  const requiredAssets = [
+    'favicon.ico',
+    'favicon-16x16.png',
+    'favicon-32x32.png',
+    'favicon-48x48.png',
+    'favicon-96x96.png',
+    'apple-touch-icon.png',
+    'android-chrome-192x192.png',
+    'android-chrome-512x512.png',
+    'icon-maskable-192x192.png',
+    'icon-maskable-512x512.png',
+    'mstile-150x150.png',
+    'site.webmanifest',
+    'browserconfig.xml',
+  ];
+
+  for (const asset of requiredAssets) {
+    const assetPath = path.join(__dirname, '..', asset);
+    expect(fs.existsSync(assetPath), `${asset} should exist in the site root`).toBe(true);
+  }
+});
 
 for (const viewport of viewports) {
   test(`responsive layout on ${viewport.name}`, async ({ page }) => {
@@ -35,7 +68,7 @@ for (const viewport of viewports) {
       const heroContentEl = document.querySelector('.hero-content');
       const heroEl = document.querySelector('.hero');
       const titleEl = document.querySelector('.hero-title');
-      const linksEl = document.querySelector('.links-container');
+      const linksEl = document.querySelector('.camera-list');
       const imageEls = Array.from(document.querySelectorAll('.link-imagem'));
       const labelEls = Array.from(document.querySelectorAll('.camera-label'));
 

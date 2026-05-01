@@ -15,6 +15,10 @@ diretamente a partir de arquivos estáticos.
 - `assets/images/fachada.webp`: imagem de fundo principal.
 - `assets/images/camera-esquerda.webp`: imagem da câmera de descida.
 - `assets/images/camera-direita.webp`: imagem da câmera de subida.
+- `favicon.ico` e demais arquivos `favicon-*`, `apple-touch-icon.png`,
+  `android-chrome-*.png`, `icon-maskable-*.png`, `mstile-150x150.png`,
+  `site.webmanifest` e `browserconfig.xml`: ícones do site e metadados
+  para navegadores, atalhos móveis e instalação.
 - `tests/responsive.spec.js`: testes de regressão visual e responsiva
   com Playwright.
 - `playwright.config.js`: configuração do Playwright.
@@ -29,6 +33,8 @@ A página inicial:
 - mostra dois cartões de câmera com rótulos de direção;
 - abre cada transmissão do YouTube em uma nova aba;
 - adapta o layout para celulares, tablets e telas maiores.
+- expõe favicon, ícone para iOS, manifesto web e metadados de tile
+  para plataformas compatíveis.
 
 ## Visualização local
 
@@ -64,6 +70,8 @@ Os testes com Playwright cobrem tamanhos representativos de celular e
 tablet e verificam:
 
 - visibilidade e posicionamento do título;
+- presença das referências de favicon e manifesto no `<head>`;
+- existência local do conjunto esperado de ícones e metadados;
 - carregamento da imagem de fundo principal;
 - carregamento real das duas imagens das câmeras;
 - layout responsivo dos cartões de câmera;
@@ -89,18 +97,26 @@ arquivos mudarem.
 Substitua `assets/images/fachada.webp` ou ajuste a regra
 `background-image` em `styles.css`.
 
+### Atualizar os favicons
+
+Substitua o conjunto de arquivos de favicon na raiz do projeto,
+mantendo os mesmos nomes, e confirme em `index.html` se as referências
+no `<head>` continuam apontando para os arquivos corretos.
+
 ### Atualizar rótulos ou estilos do título
 
 A maior parte das mudanças visuais deve ser feita em `styles.css`. O
 texto do título fica em `index.html`, enquanto as regras de tamanho,
-espaçamento, centralização e responsividade ficam na folha de estilos.
+espaçamento e responsividade ficam na folha de estilos.
 
 ## Orientações de manutenção
 
 - Mantenha os nomes dos arquivos alinhados com as referências em
-  `index.html` e `styles.css`.
+  `index.html`, `styles.css` e `site.webmanifest`.
 - Execute `npm test` após mudanças funcionais ou de layout.
 - Verifique a renderização em desktop e mobile após alterações visuais.
+- Após atualizar favicons, valide também `favicon.ico`,
+  `apple-touch-icon.png` e `site.webmanifest`.
 - Se o comportamento público do site mudar, atualize este README antes
   de finalizar.
 
