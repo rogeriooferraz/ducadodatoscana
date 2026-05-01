@@ -46,6 +46,7 @@ A página inicial:
 - abre cada câmera em uma página local de visualização em tela inteira;
 - mostra um cartão de carregamento com visual próprio enquanto a
   transmissão do YouTube inicializa;
+- inicia cada transmissão automaticamente com o áudio silenciado;
 - oferece um botão próprio de tela cheia e um botão de volta dentro da
   página de cada câmera;
 - permite indexação da página principal com metadados de SEO,
@@ -118,6 +119,8 @@ tablet e verificam:
 Edite os valores de `href` em `index.html` nas duas âncoras das
 transmissões se quiser alterar o destino local. Para mudar o vídeo do
 YouTube exibidos, atualize o objeto `cameraConfigs` em `camera.html`.
+O player atual abre com `autoplay=1` e `mute=1`, então preserve esse
+comportamento se alterar a montagem da URL incorporada.
 
 ### Atualizar as imagens das câmeras
 

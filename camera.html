@@ -46,13 +46,13 @@
         const cameraConfigs = {
             descendo: {
                 title: 'Descendo a calçada',
-                embedUrl: 'https://www.youtube.com/embed/ZXFSWTXopcc?autoplay=1&rel=0',
+                videoId: 'ZXFSWTXopcc',
                 iframeTitle: 'Câmera ao vivo descendo a calçada',
                 loadingCopy: 'Aguarde alguns segundos enquanto conectamos a câmera da calçada da portaria.'
             },
             subindo: {
                 title: 'Subindo a calçada',
-                embedUrl: 'https://www.youtube.com/embed/ry9kVJuqUCs?autoplay=1&rel=0',
+                videoId: 'ry9kVJuqUCs',
                 iframeTitle: 'Câmera ao vivo subindo a calçada',
                 loadingCopy: 'Aguarde alguns segundos enquanto conectamos a câmera da calçada subindo.'
             }
@@ -67,11 +67,17 @@
         const loadingMediaEl = document.getElementById('player-loading-media');
         const loadingMinDurationMs = 1800;
         const loadingStartedAt = Date.now();
+        const embedUrl = new URL(`https://www.youtube.com/embed/${config.videoId}`);
+
+        embedUrl.searchParams.set('autoplay', '1');
+        embedUrl.searchParams.set('mute', '1');
+        embedUrl.searchParams.set('playsinline', '1');
+        embedUrl.searchParams.set('rel', '0');
 
         document.title = `${config.title} | Condomínio Ducado da Toscana`;
         titleEl.textContent = config.title;
         loadingMediaEl.style.backgroundImage = 'url("assets/images/camera-iniciando.webp")';
-        iframeEl.src = config.embedUrl;
+        iframeEl.src = embedUrl.toString();
         iframeEl.title = config.iframeTitle;
 
         const hideLoadingCard = () => {

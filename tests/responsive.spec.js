@@ -147,7 +147,7 @@ test('camera player pages open in full-window layout and support back navigation
   );
   await expect(page.locator('.player-frame')).toHaveAttribute(
     'src',
-    /youtube\.com\/embed\/ZXFSWTXopcc\?autoplay=1&rel=0/
+    /youtube\.com\/embed\/ZXFSWTXopcc\?autoplay=1&mute=1&playsinline=1&rel=0/
   );
   await expect(page.locator('.player-action-primary')).toHaveText('Tela cheia');
   await expect(page.getByRole('link', { name: 'Voltar' })).toHaveAttribute('href', 'index.html');
@@ -201,7 +201,7 @@ test('camera player pages open in full-window layout and support back navigation
   );
   await expect(page.locator('.player-frame')).toHaveAttribute(
     'src',
-    /youtube\.com\/embed\/ry9kVJuqUCs\?autoplay=1&rel=0/
+    /youtube\.com\/embed\/ry9kVJuqUCs\?autoplay=1&mute=1&playsinline=1&rel=0/
   );
   await expect(page.locator('#player-loading-card')).toHaveClass(/player-loading-card-hidden/);
 });
