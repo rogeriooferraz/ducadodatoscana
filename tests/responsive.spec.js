@@ -140,6 +140,11 @@ test('camera player pages open in full-window layout and support back navigation
   await expect(page).toHaveURL(/camera\.html\?camera=descendo$/);
   await expect(page.locator('.player-title')).toHaveText('Descendo a calçada');
   await expect(page.locator('.player-frame')).toBeVisible();
+  await expect(page.locator('.player-loading-title')).toHaveText('Iniciando a transmissão...');
+  await expect(page.locator('#player-loading-media')).toHaveCSS(
+    'background-image',
+    /camera-iniciando\.webp/
+  );
   await expect(page.locator('.player-frame')).toHaveAttribute(
     'src',
     /youtube\.com\/embed\/ZXFSWTXopcc\?autoplay=1&rel=0/
@@ -148,6 +153,7 @@ test('camera player pages open in full-window layout and support back navigation
   await expect(page.getByRole('link', { name: 'Voltar' })).toHaveAttribute('href', 'index.html');
   await expect(page.locator('#youtube-link')).toHaveCount(0);
   await expect(page.locator('.player-note')).toHaveCount(0);
+  await expect(page.locator('#player-loading-card')).toHaveClass(/player-loading-card-hidden/);
 
   const firstActionsLayout = await page.evaluate(() => {
     const actions = document.querySelector('.player-actions');
@@ -188,10 +194,16 @@ test('camera player pages open in full-window layout and support back navigation
   await page.locator('a.camera-link').nth(1).click();
   await expect(page).toHaveURL(/camera\.html\?camera=subindo$/);
   await expect(page.locator('.player-title')).toHaveText('Subindo a calçada');
+  await expect(page.locator('.player-loading-title')).toHaveText('Iniciando a transmissão...');
+  await expect(page.locator('#player-loading-media')).toHaveCSS(
+    'background-image',
+    /camera-iniciando\.webp/
+  );
   await expect(page.locator('.player-frame')).toHaveAttribute(
     'src',
     /youtube\.com\/embed\/ry9kVJuqUCs\?autoplay=1&rel=0/
   );
+  await expect(page.locator('#player-loading-card')).toHaveClass(/player-loading-card-hidden/);
 });
 
 test('camera controls stack vertically on narrow screens', async ({ page }) => {

@@ -20,6 +20,8 @@ português (Brasil).
   WhatsApp e outros aplicativos e serviços de compartilhamento.
 - `assets/images/camera-esquerda.webp`: imagem da câmera de descida.
 - `assets/images/camera-direita.webp`: imagem da câmera de subida.
+- `assets/images/camera-iniciando.webp`: imagem de fundo do
+  estado de carregamento da página de câmera.
 - `camera.html`: página local de visualização em tela inteira para as
   transmissões, com seleção de câmera via parâmetro na URL.
 - `camera.css`: estilos da página local de visualização das câmeras.
@@ -42,6 +44,8 @@ A página inicial:
 - usa `assets/images/fachada.webp` como imagem de fundo principal;
 - mostra dois cartões de câmera com rótulos de direção;
 - abre cada câmera em uma página local de visualização em tela inteira;
+- mostra um cartão de carregamento com visual próprio enquanto a
+  transmissão do YouTube inicializa;
 - oferece um botão próprio de tela cheia e um botão de volta dentro da
   página de cada câmera;
 - permite indexação da página principal com metadados de SEO,
@@ -97,6 +101,7 @@ tablet e verificam:
 - carregamento da imagem de fundo principal;
 - carregamento real das duas imagens das câmeras;
 - presença do player incorporado com o vídeo esperado em cada página;
+- presença do cartão de carregamento temporário da página de câmera;
 - ausência do link externo do YouTube e dos textos auxiliares removidos
   na página de câmera;
 - layout responsivo dos cartões de câmera;

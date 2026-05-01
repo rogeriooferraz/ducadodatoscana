@@ -12,6 +12,12 @@
 <body>
     <main class="player-shell">
         <section class="player-stage">
+            <div class="player-loading-card" id="player-loading-card" aria-live="polite">
+                <div class="player-loading-media" id="player-loading-media" aria-hidden="true"></div>
+                <div class="player-loading-content">
+                    <h2 class="player-loading-title">Iniciando a transmissão...</h2>
+                </div>
+            </div>
             <iframe
                 id="camera-player"
                 class="player-frame"
@@ -41,12 +47,14 @@
             descendo: {
                 title: 'Descendo a calçada',
                 embedUrl: 'https://www.youtube.com/embed/ZXFSWTXopcc?autoplay=1&rel=0',
-                iframeTitle: 'Câmera ao vivo descendo a calçada'
+                iframeTitle: 'Câmera ao vivo descendo a calçada',
+                loadingCopy: 'Aguarde alguns segundos enquanto conectamos a câmera da calçada da portaria.'
             },
             subindo: {
                 title: 'Subindo a calçada',
                 embedUrl: 'https://www.youtube.com/embed/ry9kVJuqUCs?autoplay=1&rel=0',
-                iframeTitle: 'Câmera ao vivo subindo a calçada'
+                iframeTitle: 'Câmera ao vivo subindo a calçada',
+                loadingCopy: 'Aguarde alguns segundos enquanto conectamos a câmera da calçada subindo.'
             }
         };
 
@@ -55,11 +63,27 @@
         const config = cameraConfigs[cameraKey] || cameraConfigs.descendo;
         const titleEl = document.getElementById('camera-title');
         const iframeEl = document.getElementById('camera-player');
+        const loadingCardEl = document.getElementById('player-loading-card');
+        const loadingMediaEl = document.getElementById('player-loading-media');
+        const loadingMinDurationMs = 1800;
+        const loadingStartedAt = Date.now();
 
         document.title = `${config.title} | Condomínio Ducado da Toscana`;
         titleEl.textContent = config.title;
+        loadingMediaEl.style.backgroundImage = 'url("assets/images/camera-iniciando.webp")';
         iframeEl.src = config.embedUrl;
         iframeEl.title = config.iframeTitle;
+
+        const hideLoadingCard = () => {
+            const elapsed = Date.now() - loadingStartedAt;
+            const remaining = Math.max(0, loadingMinDurationMs - elapsed);
+
+            window.setTimeout(() => {
+                loadingCardEl.classList.add('player-loading-card-hidden');
+            }, remaining);
+        };
+
+        iframeEl.addEventListener('load', hideLoadingCard, { once: true });
 
         document.querySelector('[data-fullscreen-target]')?.addEventListener('click', async (event) => {
             const selector = event.currentTarget.getAttribute('data-fullscreen-target');
