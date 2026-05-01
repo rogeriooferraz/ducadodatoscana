@@ -64,6 +64,8 @@ Os testes com Playwright cobrem tamanhos representativos de celular e
 tablet e verificam:
 
 - visibilidade e posicionamento do título;
+- carregamento da imagem de fundo principal;
+- carregamento real das duas imagens das câmeras;
 - layout responsivo dos cartões de câmera;
 - presença e posicionamento dos rótulos das câmeras;
 - tamanho do título em telas pequenas;
@@ -91,7 +93,7 @@ Substitua `assets/images/fachada.webp` ou ajuste a regra
 
 A maior parte das mudanças visuais deve ser feita em `styles.css`. O
 texto do título fica em `index.html`, enquanto as regras de tamanho,
-espaçamento e responsividade ficam na folha de estilos.
+espaçamento, centralização e responsividade ficam na folha de estilos.
 
 ## Orientações de manutenção
 

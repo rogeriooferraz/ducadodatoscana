@@ -33,8 +33,9 @@ for (const viewport of viewports) {
 
     const layout = await page.evaluate(() => {
       const heroContentEl = document.querySelector('.hero-content');
+      const heroEl = document.querySelector('.hero');
       const titleEl = document.querySelector('.hero-title');
-      const linksEl = document.querySelector('.camera-list');
+      const linksEl = document.querySelector('.links-container');
       const imageEls = Array.from(document.querySelectorAll('.link-imagem'));
       const labelEls = Array.from(document.querySelectorAll('.camera-label'));
 
@@ -42,6 +43,11 @@ for (const viewport of viewports) {
       const titleRect = titleEl.getBoundingClientRect();
       const linksRect = linksEl.getBoundingClientRect();
       const imageRects = imageEls.map((img) => img.getBoundingClientRect());
+      const imageLoadStates = imageEls.map((img) => ({
+        currentSrc: img.currentSrc,
+        naturalWidth: img.naturalWidth,
+        complete: img.complete,
+      }));
       const labelsData = labelEls.map((label) => ({
         text: label.textContent.trim(),
         rect: label.getBoundingClientRect(),
@@ -56,8 +62,10 @@ for (const viewport of viewports) {
         titleFontSize: parseFloat(window.getComputedStyle(titleEl).fontSize),
         linksRect,
         imageRects,
+        imageLoadStates,
         labelsData,
         titleAlign: window.getComputedStyle(titleEl).textAlign,
+        heroBackgroundImage: window.getComputedStyle(heroEl).backgroundImage,
       };
     });
 
@@ -66,6 +74,12 @@ for (const viewport of viewports) {
       'DESCENDO A CALÇADA',
       'SUBINDO A CALÇADA',
     ]);
+    expect(layout.heroBackgroundImage).toContain('assets/images/fachada.webp');
+    for (const imageState of layout.imageLoadStates) {
+      expect(imageState.complete).toBe(true);
+      expect(imageState.naturalWidth).toBeGreaterThan(0);
+      expect(imageState.currentSrc).toContain('assets/images/');
+    }
     expect(layout.titleAlign).toBe('center');
     expect(layout.titleRect.left).toBeGreaterThanOrEqual(12);
     expect(layout.viewportWidth - layout.titleRect.right).toBeGreaterThanOrEqual(12);
