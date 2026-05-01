@@ -8,6 +8,9 @@ transmissões ao vivo.
 O projeto não usa framework nem etapa de build. O site é servido
 diretamente a partir de arquivos estáticos.
 
+O conteúdo público da página e desta documentação permanece em
+português (Brasil).
+
 ## Estrutura do projeto
 
 - `index.html`: documento principal e conteúdo da página.
@@ -19,6 +22,8 @@ diretamente a partir de arquivos estáticos.
   `android-chrome-*.png`, `icon-maskable-*.png`, `mstile-150x150.png`,
   `site.webmanifest` e `browserconfig.xml`: ícones do site e metadados
   para navegadores, atalhos móveis e instalação.
+- `robots.txt`, `sitemap.xml` e `llms.txt`: arquivos de descoberta para
+  mecanismos de busca e crawlers de LLM.
 - `tests/responsive.spec.js`: testes de regressão visual e responsiva
   com Playwright.
 - `playwright.config.js`: configuração do Playwright.
@@ -32,6 +37,12 @@ A página inicial:
 - usa `assets/images/fachada.webp` como imagem de fundo principal;
 - mostra dois cartões de câmera com rótulos de direção;
 - abre cada transmissão do YouTube em uma nova aba;
+- permite indexação da página principal com metadados de SEO,
+  Open Graph, Twitter Card e dados estruturados;
+- expõe `robots.txt`, `sitemap.xml` e `llms.txt` para descoberta por
+  crawlers;
+- marca os links externos do YouTube com `rel="nofollow"` para evitar
+  que sejam tratados como links editoriais para indexação;
 - adapta o layout para celulares, tablets e telas maiores.
 - expõe favicon, ícone para iOS, manifesto web e metadados de tile
   para plataformas compatíveis.
@@ -72,6 +83,9 @@ tablet e verificam:
 - visibilidade e posicionamento do título;
 - presença das referências de favicon e manifesto no `<head>`;
 - existência local do conjunto esperado de ícones e metadados;
+- presença dos metadados de SEO, Open Graph, Twitter Card e JSON-LD;
+- existência local de `robots.txt`, `sitemap.xml` e `llms.txt`;
+- uso de `rel="nofollow"` nos links externos do YouTube;
 - carregamento da imagem de fundo principal;
 - carregamento real das duas imagens das câmeras;
 - layout responsivo dos cartões de câmera;
@@ -84,7 +98,8 @@ tablet e verificam:
 ### Atualizar os links das câmeras
 
 Edite os valores de `href` em `index.html` nas duas âncoras das
-transmissões.
+transmissões. Preserve `rel="nofollow noopener noreferrer external"`
+para manter o comportamento atual de crawler.
 
 ### Atualizar as imagens das câmeras
 
@@ -103,6 +118,19 @@ Substitua o conjunto de arquivos de favicon na raiz do projeto,
 mantendo os mesmos nomes, e confirme em `index.html` se as referências
 no `<head>` continuam apontando para os arquivos corretos.
 
+### Atualizar metadados de SEO e crawler
+
+Edite em conjunto:
+
+- o bloco de metadados no `<head>` de `index.html`;
+- o JSON-LD em `index.html`;
+- `robots.txt`;
+- `sitemap.xml`;
+- `llms.txt`.
+
+Se a URL canônica do site mudar, atualize todos esses pontos na mesma
+alteração.
+
 ### Atualizar rótulos ou estilos do título
 
 A maior parte das mudanças visuais deve ser feita em `styles.css`. O
@@ -112,11 +140,15 @@ espaçamento e responsividade ficam na folha de estilos.
 ## Orientações de manutenção
 
 - Mantenha os nomes dos arquivos alinhados com as referências em
-  `index.html`, `styles.css` e `site.webmanifest`.
+  `index.html`, `styles.css`, `site.webmanifest`, `robots.txt`,
+  `sitemap.xml` e `llms.txt`.
 - Execute `npm test` após mudanças funcionais ou de layout.
 - Verifique a renderização em desktop e mobile após alterações visuais.
 - Após atualizar favicons, valide também `favicon.ico`,
   `apple-touch-icon.png` e `site.webmanifest`.
+- Após alterar SEO ou descoberta por crawler, valide também a URL
+  canônica, os metadados sociais e os arquivos `robots.txt`,
+  `sitemap.xml` e `llms.txt`.
 - Se o comportamento público do site mudar, atualize este README antes
   de finalizar.
 

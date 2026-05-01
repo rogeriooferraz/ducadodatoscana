@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ducadodatoscana.org.br/sitemap.xml

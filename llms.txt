@@ -1,0 +1,9 @@
+# Condomínio Ducado da Toscana
+
+> Página oficial com acesso rápido às transmissões ao vivo do condomínio.
+
+- URL canônica: https://ducadodatoscana.org.br/
+- Idioma principal: pt-BR
+- Tipo de conteúdo: página estática institucional com links para câmeras ao vivo
+- Resumo: a página apresenta o nome do condomínio e dois acessos externos para transmissões ao vivo.
+- Observação para crawlers: os links externos do YouTube fazem parte da navegação da página, mas foram marcados com `rel="nofollow"` para não serem tratados como links editoriais para indexação.

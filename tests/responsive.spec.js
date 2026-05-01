@@ -49,6 +49,46 @@ test('favicon metadata and assets are present', async ({ page }) => {
   }
 });
 
+test('SEO and crawler metadata are present', async ({ page }) => {
+  await page.goto(pageUrl);
+
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    'https://ducadodatoscana.org.br/'
+  );
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    'content',
+    'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+  );
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website');
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+    'content',
+    'https://ducadodatoscana.org.br/'
+  );
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+    'content',
+    'summary_large_image'
+  );
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
+
+  const llmAndCrawlerFiles = ['robots.txt', 'sitemap.xml', 'llms.txt'];
+  for (const asset of llmAndCrawlerFiles) {
+    const assetPath = path.join(__dirname, '..', asset);
+    expect(fs.existsSync(assetPath), `${asset} should exist in the site root`).toBe(true);
+  }
+
+  const youtubeLinks = page.locator('a.camera-link[href*="youtu"]');
+  await expect(youtubeLinks).toHaveCount(2);
+  await expect(youtubeLinks.nth(0)).toHaveAttribute(
+    'rel',
+    /(^| )nofollow( |$).*noopener.*noreferrer.*external|(^| )external( |$).*nofollow/
+  );
+  await expect(youtubeLinks.nth(1)).toHaveAttribute(
+    'rel',
+    /(^| )nofollow( |$).*noopener.*noreferrer.*external|(^| )external( |$).*nofollow/
+  );
+});
+
 for (const viewport of viewports) {
   test(`responsive layout on ${viewport.name}`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
