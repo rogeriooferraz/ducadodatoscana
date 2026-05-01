@@ -7,26 +7,10 @@
     <meta name="description" content="Visualização em tela inteira das câmeras do Condomínio Ducado da Toscana.">
     <meta name="robots" content="noindex,nofollow">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <link rel="stylesheet" href="player.css">
+    <link rel="stylesheet" href="camera.css">
 </head>
 <body>
     <main class="player-shell">
-        <section class="player-topbar" aria-label="Controles da câmera">
-            <div class="player-heading">
-                <p class="player-kicker">Ao vivo</p>
-                <h1 class="player-title" id="camera-title">Câmera ao vivo</h1>
-                <p class="player-note">Use o botão de tela cheia para ampliar o vídeo no navegador. Se o player não abrir, use o atalho do YouTube.</p>
-            </div>
-            <div class="player-actions">
-                <button class="player-action player-action-primary" type="button" data-fullscreen-target="#camera-player">
-                    Tela cheia
-                </button>
-                <a class="player-action player-action-secondary" href="index.html">Voltar ao início</a>
-                <a class="player-action player-action-secondary" id="youtube-link" href="https://www.youtube.com/" rel="noopener noreferrer external">
-                    Abrir no YouTube
-                </a>
-            </div>
-        </section>
         <section class="player-stage">
             <iframe
                 id="camera-player"
@@ -39,19 +23,29 @@
                 allowfullscreen
             ></iframe>
         </section>
+        <section class="player-topbar" aria-label="Controles da câmera">
+            <div class="player-heading">
+                <p class="player-kicker">Ao vivo</p>
+                <h1 class="player-title" id="camera-title">Câmera ao vivo</h1>
+            </div>
+            <div class="player-actions">
+                <button class="player-action player-action-primary" type="button" data-fullscreen-target="#camera-player">
+                    Tela cheia
+                </button>
+                <a class="player-action player-action-secondary" href="index.html">Voltar</a>
+            </div>
+        </section>
     </main>
     <script>
         const cameraConfigs = {
             descendo: {
                 title: 'Descendo a calçada',
                 embedUrl: 'https://www.youtube.com/embed/ZXFSWTXopcc?autoplay=1&rel=0',
-                watchUrl: 'https://www.youtube.com/watch?v=ZXFSWTXopcc',
                 iframeTitle: 'Câmera ao vivo descendo a calçada'
             },
             subindo: {
                 title: 'Subindo a calçada',
                 embedUrl: 'https://www.youtube.com/embed/ry9kVJuqUCs?autoplay=1&rel=0',
-                watchUrl: 'https://www.youtube.com/watch?v=ry9kVJuqUCs',
                 iframeTitle: 'Câmera ao vivo subindo a calçada'
             }
         };
@@ -61,13 +55,11 @@
         const config = cameraConfigs[cameraKey] || cameraConfigs.descendo;
         const titleEl = document.getElementById('camera-title');
         const iframeEl = document.getElementById('camera-player');
-        const youtubeLinkEl = document.getElementById('youtube-link');
 
         document.title = `${config.title} | Condomínio Ducado da Toscana`;
         titleEl.textContent = config.title;
         iframeEl.src = config.embedUrl;
         iframeEl.title = config.iframeTitle;
-        youtubeLinkEl.href = config.watchUrl;
 
         document.querySelector('[data-fullscreen-target]')?.addEventListener('click', async (event) => {
             const selector = event.currentTarget.getAttribute('data-fullscreen-target');

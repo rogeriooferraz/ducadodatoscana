@@ -31,17 +31,16 @@ body {
     min-height: 100vh;
     min-height: 100svh;
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
     gap: clamp(16px, 2vw, 24px);
     padding: clamp(14px, 2.6vw, 28px);
 }
 
 .player-topbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 16px;
     padding: 12px 14px;
     border: 1px solid var(--panel-border);
     border-radius: 18px;
@@ -53,6 +52,7 @@ body {
 .player-heading {
     display: grid;
     gap: 4px;
+    min-width: 0;
 }
 
 .player-kicker {
@@ -70,9 +70,10 @@ body {
 }
 
 .player-actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
     gap: 10px;
+    justify-content: end;
 }
 
 .player-action {
@@ -141,16 +142,17 @@ body {
 @media (max-width: 640px) {
     .player-topbar {
         align-items: stretch;
+        grid-template-columns: 1fr;
     }
 
     .player-actions {
         width: 100%;
+        grid-template-columns: 1fr;
+        justify-content: stretch;
     }
 
     .player-action {
-        flex: 1 1 0;
         text-align: center;
-        justify-content: center;
     }
 
     .player-frame {

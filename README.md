@@ -22,7 +22,7 @@ português (Brasil).
 - `assets/images/camera-direita.webp`: imagem da câmera de subida.
 - `camera.html`: página local de visualização em tela inteira para as
   transmissões, com seleção de câmera via parâmetro na URL.
-- `player.css`: estilos compartilhados das páginas das câmeras.
+- `camera.css`: estilos da página local de visualização das câmeras.
 - `favicon.ico` e demais arquivos `favicon-*`, `apple-touch-icon.png`,
   `android-chrome-*.png`, `icon-maskable-*.png`, `mstile-150x150.png`,
   `site.webmanifest` e `browserconfig.xml`: ícones do site e metadados
@@ -42,7 +42,8 @@ A página inicial:
 - usa `assets/images/fachada.webp` como imagem de fundo principal;
 - mostra dois cartões de câmera com rótulos de direção;
 - abre cada câmera em uma página local de visualização em tela inteira;
-- oferece um botão próprio de tela cheia dentro da página de cada câmera;
+- oferece um botão próprio de tela cheia e um botão de volta dentro da
+  página de cada câmera;
 - permite indexação da página principal com metadados de SEO,
   Open Graph, Twitter Card e dados estruturados;
 - usa `assets/images/fachada.jpg` como imagem de prévia de link;
@@ -96,7 +97,11 @@ tablet e verificam:
 - carregamento da imagem de fundo principal;
 - carregamento real das duas imagens das câmeras;
 - presença do player incorporado com o vídeo esperado em cada página;
+- ausência do link externo do YouTube e dos textos auxiliares removidos
+  na página de câmera;
 - layout responsivo dos cartões de câmera;
+- disposição horizontal dos botões da câmera em telas largas e vertical
+  em telas estreitas;
 - presença e posicionamento dos rótulos das câmeras;
 - tamanho do título em telas pequenas;
 - regressões de overflow horizontal.

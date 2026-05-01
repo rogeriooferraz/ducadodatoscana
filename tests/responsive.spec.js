@@ -145,8 +145,24 @@ test('camera player pages open in full-window layout and support back navigation
     /youtube\.com\/embed\/ZXFSWTXopcc\?autoplay=1&rel=0/
   );
   await expect(page.locator('.player-action-primary')).toHaveText('Tela cheia');
-  await expect(page.getByRole('link', { name: 'Voltar ao início' })).toHaveAttribute('href', 'index.html');
-  await expect(page.locator('#youtube-link')).toHaveAttribute('href', 'https://www.youtube.com/watch?v=ZXFSWTXopcc');
+  await expect(page.getByRole('link', { name: 'Voltar' })).toHaveAttribute('href', 'index.html');
+  await expect(page.locator('#youtube-link')).toHaveCount(0);
+  await expect(page.locator('.player-note')).toHaveCount(0);
+
+  const firstActionsLayout = await page.evaluate(() => {
+    const actions = document.querySelector('.player-actions');
+    const children = Array.from(actions.children).map((child) => {
+      const rect = child.getBoundingClientRect();
+      return { top: rect.top, left: rect.left };
+    });
+
+    return {
+      columns: getComputedStyle(actions).gridTemplateColumns,
+      children,
+      topbarBottom: document.querySelector('.player-topbar').getBoundingClientRect().bottom,
+      stageBottom: document.querySelector('.player-stage').getBoundingClientRect().bottom,
+    };
+  });
 
   const firstLayout = await page.evaluate(() => {
     const frame = document.querySelector('.player-frame');
@@ -161,6 +177,9 @@ test('camera player pages open in full-window layout and support back navigation
 
   expect(firstLayout.frameWidth).toBeGreaterThan(firstLayout.width * 0.88);
   expect(firstLayout.frameHeight).toBeGreaterThan(firstLayout.height * 0.55);
+  expect(firstActionsLayout.columns.split(' ').length).toBe(2);
+  expect(Math.abs(firstActionsLayout.children[0].top - firstActionsLayout.children[1].top)).toBeLessThan(8);
+  expect(firstActionsLayout.topbarBottom).toBeGreaterThan(firstActionsLayout.stageBottom);
 
   await page.goBack();
   await expect(page).toHaveURL(pageUrl);
@@ -173,7 +192,29 @@ test('camera player pages open in full-window layout and support back navigation
     'src',
     /youtube\.com\/embed\/ry9kVJuqUCs\?autoplay=1&rel=0/
   );
-  await expect(page.locator('#youtube-link')).toHaveAttribute('href', 'https://www.youtube.com/watch?v=ry9kVJuqUCs');
+});
+
+test('camera controls stack vertically on narrow screens', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(new URL('camera.html?camera=descendo', pageUrl).href);
+
+  const mobileActionsLayout = await page.evaluate(() => {
+    const actions = document.querySelector('.player-actions');
+    const children = Array.from(actions.children).map((child) => {
+      const rect = child.getBoundingClientRect();
+      return { top: rect.top, left: rect.left, width: rect.width };
+    });
+
+    return {
+      columns: getComputedStyle(actions).gridTemplateColumns,
+      children,
+      actionsWidth: actions.getBoundingClientRect().width,
+    };
+  });
+
+  expect(mobileActionsLayout.columns.split(' ').length).toBe(1);
+  expect(mobileActionsLayout.children[1].top).toBeGreaterThan(mobileActionsLayout.children[0].top + 8);
+  expect(mobileActionsLayout.children[0].width).toBeGreaterThan(mobileActionsLayout.actionsWidth * 0.9);
 });
 
 test('fullscreen button requests browser fullscreen for the player', async ({ page }) => {
