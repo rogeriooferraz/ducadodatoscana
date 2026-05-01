@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
-const pageUrl = pathToFileURL(path.join(__dirname, '..', 'index.html')).href;
+const pageUrl = process.env.PLAYWRIGHT_BASE_URL || pathToFileURL(path.join(__dirname, '..', 'index.html')).href;
 
 const viewports = [
   { name: 'Galaxy S20 Ultra', width: 360, height: 800, compact: true },
@@ -20,12 +20,15 @@ const viewports = [
 test('favicon metadata and assets are present', async ({ page }) => {
   await page.goto(pageUrl);
 
-  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', 'site.webmanifest');
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', '/site.webmanifest');
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
     'href',
-    'apple-touch-icon.png'
+    '/apple-touch-icon.png'
   );
-  await expect(page.locator('link[rel="icon"][sizes="any"]')).toHaveAttribute('href', 'favicon.ico');
+  await expect(page.locator('link[rel="icon"][type="image/x-icon"]')).toHaveAttribute(
+    'href',
+    '/favicon.ico'
+  );
 
   const requiredAssets = [
     'favicon.ico',
@@ -49,6 +52,19 @@ test('favicon metadata and assets are present', async ({ page }) => {
   }
 });
 
+test('declared favicon assets are fetchable from the served site', async ({ page, request }) => {
+  await page.goto(pageUrl);
+
+  const iconHrefs = await page
+    .locator('link[rel="shortcut icon"], link[rel="icon"], link[rel="apple-touch-icon"], link[rel="manifest"]')
+    .evaluateAll((links) => [...new Set(links.map((link) => link.href))]);
+
+  for (const href of iconHrefs) {
+    const response = await request.get(href);
+    expect(response.ok(), `${href} should return a successful response`).toBe(true);
+  }
+});
+
 test('SEO and crawler metadata are present', async ({ page }) => {
   await page.goto(pageUrl);
 
@@ -65,13 +81,33 @@ test('SEO and crawler metadata are present', async ({ page }) => {
     'content',
     'https://ducadodatoscana.org.br/'
   );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    'https://ducadodatoscana.org.br/assets/images/fachada.jpg'
+  );
+  await expect(page.locator('meta[property="og:image:type"]')).toHaveAttribute(
+    'content',
+    'image/jpeg'
+  );
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
+    'content',
+    '1200'
+  );
+  await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
+    'content',
+    '630'
+  );
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
     'content',
     'summary_large_image'
   );
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+    'content',
+    'https://ducadodatoscana.org.br/assets/images/fachada.jpg'
+  );
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
 
-  const llmAndCrawlerFiles = ['robots.txt', 'sitemap.xml', 'llms.txt'];
+  const llmAndCrawlerFiles = ['robots.txt', 'sitemap.xml', 'llms.txt', 'assets/images/fachada.jpg'];
   for (const asset of llmAndCrawlerFiles) {
     const assetPath = path.join(__dirname, '..', asset);
     expect(fs.existsSync(assetPath), `${asset} should exist in the site root`).toBe(true);

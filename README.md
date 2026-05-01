@@ -16,6 +16,8 @@ português (Brasil).
 - `index.html`: documento principal e conteúdo da página.
 - `styles.css`: estilos da página e regras de responsividade.
 - `assets/images/fachada.webp`: imagem de fundo principal.
+- `assets/images/fachada.jpg`: imagem de prévia de link usada em
+  WhatsApp e outros aplicativos e serviços de compartilhamento.
 - `assets/images/camera-esquerda.webp`: imagem da câmera de descida.
 - `assets/images/camera-direita.webp`: imagem da câmera de subida.
 - `favicon.ico` e demais arquivos `favicon-*`, `apple-touch-icon.png`,
@@ -39,6 +41,7 @@ A página inicial:
 - abre cada transmissão do YouTube em uma nova aba;
 - permite indexação da página principal com metadados de SEO,
   Open Graph, Twitter Card e dados estruturados;
+- usa `assets/images/fachada.jpg` como imagem de prévia de link;
 - expõe `robots.txt`, `sitemap.xml` e `llms.txt` para descoberta por
   crawlers;
 - marca os links externos do YouTube com `rel="nofollow"` para evitar
@@ -84,6 +87,7 @@ tablet e verificam:
 - presença das referências de favicon e manifesto no `<head>`;
 - existência local do conjunto esperado de ícones e metadados;
 - presença dos metadados de SEO, Open Graph, Twitter Card e JSON-LD;
+- existência local da imagem de prévia de link usada nas metatags;
 - existência local de `robots.txt`, `sitemap.xml` e `llms.txt`;
 - uso de `rel="nofollow"` nos links externos do YouTube;
 - carregamento da imagem de fundo principal;
@@ -111,6 +115,13 @@ arquivos mudarem.
 
 Substitua `assets/images/fachada.webp` ou ajuste a regra
 `background-image` em `styles.css`.
+
+### Atualizar a imagem de prévia de link
+
+Substitua `assets/images/fachada.jpg` mantendo o formato JPEG e,
+de preferência, a proporção `1200x630`. Se o nome do arquivo mudar,
+atualize em conjunto as metatags `og:image`, `og:image:secure_url` e
+`twitter:image` em `index.html`.
 
 ### Atualizar os favicons
 
@@ -147,7 +158,8 @@ espaçamento e responsividade ficam na folha de estilos.
 - Após atualizar favicons, valide também `favicon.ico`,
   `apple-touch-icon.png` e `site.webmanifest`.
 - Após alterar SEO ou descoberta por crawler, valide também a URL
-  canônica, os metadados sociais e os arquivos `robots.txt`,
+  canônica, os metadados de prévia de link,
+  `assets/images/fachada.jpg` e os arquivos `robots.txt`,
   `sitemap.xml` e `llms.txt`.
 - Se o comportamento público do site mudar, atualize este README antes
   de finalizar.
