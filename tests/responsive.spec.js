@@ -138,7 +138,7 @@ test('camera player pages open in full-window layout and support back navigation
   await page.locator('a.camera-link').nth(0).click();
 
   await expect(page).toHaveURL(/camera\.html\?camera=descendo$/);
-  await expect(page.locator('.player-title')).toHaveText('Descendo a calçada');
+  await expect(page.locator('.player-title')).toHaveText('Ladeira abaixo');
   await expect(page.locator('.player-frame')).toBeVisible();
   await expect(page.locator('.player-loading-title')).toHaveText('Iniciando a transmissão...');
   await expect(page.locator('#player-loading-media')).toHaveCSS(
@@ -193,7 +193,7 @@ test('camera player pages open in full-window layout and support back navigation
 
   await page.locator('a.camera-link').nth(1).click();
   await expect(page).toHaveURL(/camera\.html\?camera=subindo$/);
-  await expect(page.locator('.player-title')).toHaveText('Subindo a calçada');
+  await expect(page.locator('.player-title')).toHaveText('Ladeira acima');
   await expect(page.locator('.player-loading-title')).toHaveText('Iniciando a transmissão...');
   await expect(page.locator('#player-loading-media')).toHaveCSS(
     'background-image',
@@ -201,7 +201,7 @@ test('camera player pages open in full-window layout and support back navigation
   );
   await expect(page.locator('.player-frame')).toHaveAttribute(
     'src',
-    /youtube\.com\/embed\/ry9kVJuqUCs\?autoplay=1&mute=1&playsinline=1&rel=0/
+    /youtube\.com\/embed\/bAUKHPqeiKs\?autoplay=1&mute=1&playsinline=1&rel=0/
   );
   await expect(page.locator('#player-loading-card')).toHaveClass(/player-loading-card-hidden/);
 });
@@ -293,8 +293,8 @@ for (const viewport of viewports) {
 
     expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
     expect(layout.labelsData.map((label) => label.text).sort()).toEqual([
-      'DESCENDO A CALÇADA',
-      'SUBINDO A CALÇADA',
+      'LADEIRA ABAIXO',
+      'LADEIRA ACIMA',
     ]);
     expect(layout.heroBackgroundImage).toContain('assets/images/fachada.webp');
     for (const imageState of layout.imageLoadStates) {
@@ -319,8 +319,8 @@ for (const viewport of viewports) {
     } else if (viewport.width <= 480) {
       expect(layout.titleFontSize).toBeGreaterThanOrEqual(40);
     }
-    const descendingLabel = layout.labelsData.find((label) => label.text === 'DESCENDO A CALÇADA');
-    const ascendingLabel = layout.labelsData.find((label) => label.text === 'SUBINDO A CALÇADA');
+    const descendingLabel = layout.labelsData.find((label) => label.text === 'LADEIRA ABAIXO');
+    const ascendingLabel = layout.labelsData.find((label) => label.text === 'LADEIRA ACIMA');
     expect(descendingLabel.rect.left).toBeGreaterThanOrEqual(layout.imageRects[0].left);
     expect(descendingLabel.rect.right).toBeLessThanOrEqual(layout.imageRects[0].right);
     expect(descendingLabel.rect.bottom).toBeLessThanOrEqual(layout.imageRects[0].bottom);
