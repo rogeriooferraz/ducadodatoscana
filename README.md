@@ -5,8 +5,9 @@ Condomínio Ducado da Toscana. A página apresenta o nome do condomínio
 sobre uma imagem de fundo em tela cheia e oferece dois links para
 transmissões ao vivo.
 
-O projeto não usa framework nem etapa de build. O site é servido
-diretamente a partir de arquivos estáticos.
+O projeto não usa framework, mas agora possui uma etapa simples de
+build para montar uma pasta `dist/` pronta para publicação. O site
+continua sendo servido diretamente a partir de arquivos estáticos.
 
 O conteúdo público da página e desta documentação permanece em
 português (Brasil).
@@ -35,6 +36,8 @@ português (Brasil).
   com Playwright.
 - `playwright.config.js`: configuração do Playwright.
 - `package.json`: script de teste e dependências de desenvolvimento.
+- `scripts/build.js`: montagem da pasta `dist/` para publicação.
+- `dist/`: saída gerada pelo build com os arquivos públicos do site.
 
 ## Comportamento atual
 
@@ -88,6 +91,18 @@ Execute a suíte de regressão responsiva:
 npm test
 ```
 
+Monte a pasta de publicação:
+
+```bash
+npm run build
+```
+
+Se quiser testar otimização opcional de imagens durante o build:
+
+```bash
+npm run build:images
+```
+
 Os testes com Playwright cobrem tamanhos representativos de celular e
 tablet e verificam:
 
@@ -111,6 +126,17 @@ tablet e verificam:
 - presença e posicionamento dos rótulos das câmeras;
 - tamanho do título em telas pequenas;
 - regressões de overflow horizontal.
+
+O build de produção:
+
+- recria a pasta `dist/`;
+- valida a presença dos arquivos públicos obrigatórios;
+- minifica `index.html`, `camera.html`, `styles.css` e `camera.css`;
+- gera variantes pré-comprimidas `.gz` e `.br` para HTML, CSS,
+  manifesto e arquivos de descoberta em texto;
+- copia HTML, CSS, favicons, manifestos, metadados e `assets/`;
+- pode otimizar imagens de forma opcional com `npm run build:images`;
+- gera um pacote estático pronto para upload na hospedagem.
 
 ## Edições comuns
 
@@ -171,6 +197,10 @@ espaçamento e responsividade ficam na folha de estilos.
   `index.html`, `styles.css`, `site.webmanifest`, `robots.txt`,
   `sitemap.xml` e `llms.txt`.
 - Execute `npm test` após mudanças funcionais ou de layout.
+- Execute `npm run build` antes de publicar para garantir uma saída
+  limpa em `dist/`.
+- Se quiser reduzir também o peso das imagens, execute
+  `npm run build:images` e compare o resultado antes de publicar.
 - Verifique a renderização em desktop e mobile após alterações visuais.
 - Após atualizar favicons, valide também `favicon.ico`,
   `apple-touch-icon.png` e `site.webmanifest`.
@@ -189,5 +219,12 @@ do ambiente de hospedagem usado para o site.
 Em termos práticos, o fluxo mínimo costuma ser:
 
 1. atualizar os arquivos estáticos;
-2. publicar ou enviar os arquivos alterados para a hospedagem;
-3. validar a página publicada, os links e o layout responsivo.
+2. executar `npm test`;
+3. executar `npm run build`;
+4. publicar o conteúdo da pasta `dist/` na hospedagem;
+5. validar a página publicada, os links e o layout responsivo.
+
+Se a hospedagem suportar entrega de arquivos pré-comprimidos, as
+variantes `.gz` e `.br` geradas no build podem ser aproveitadas pelo
+servidor. Caso contrário, esses arquivos extras podem permanecer sem
+uso, sem alterar o funcionamento do site.

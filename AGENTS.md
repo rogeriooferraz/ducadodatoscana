@@ -25,6 +25,9 @@
 
 ## Commit Messages
 
-1. When applicable, suggest a commit message with a title line limited to 50 characters and functional descriptions only, without implementation details.
-2. Add a commit body only when it improves clarity. Limit body lines to 72 characters.
-3. Unless the user states otherwise, use `git diff HEAD~1 HEAD` to determine the scope for the suggested commit message.
+1. When applicable, suggest a commit message with a title and a functional description, without implementation details.
+2. A commit message always includes a title and a body. The title is limited to 50 characters. The body is limited to 72 characters per line.
+3. For commit message requests, use this scope order:
+   - If there are staged changes, use the staged diff.
+   - Otherwise, if there are current uncommitted changes, use those changes.
+   - Otherwise, use `git diff HEAD~1 HEAD`.
